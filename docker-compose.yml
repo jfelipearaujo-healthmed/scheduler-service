@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:  
+  scheduler_db:
+    image: postgres:16.0
+    container_name: scheduler_db
+    environment:
+      POSTGRES_DB: "scheduler_db"
+      POSTGRES_USER: "scheduler"
+      POSTGRES_PASSWORD: "scheduler"
+    ports:
+      - "5432:5432"
+    networks:
+      - api-network
+  
+  pgadmin:
+    depends_on:
+      - scheduler_db
+    image: dpage/pgadmin4:7.8
+    container_name: pgadmin
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "5050:80"
+    networks:
+      - api-network
+
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"            # LocalStack Gateway
+      - "4510-4559:4510-4559"  # external services port range
+    environment:
+      - DEBUG=0
+      - DEFAULT_REGION=us-east-1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - ./scripts/localstack/:/etc/localstack/init/ready.d/
+
+  redis:
+    image: redis:7.2
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+networks:
+  api-network:
+    driver: bridge
+
+volumes:
+  pgadmin-data:
