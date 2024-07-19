@@ -8,6 +8,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
+	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/domain/entities"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/infrastructure/config"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/infrastructure/shared/logger"
 	slogGorm "github.com/orandin/slog-gorm"
@@ -40,7 +41,9 @@ func (svc *DbService) Connect(config *config.Config) error {
 		return err
 	}
 
-	if err := conn.AutoMigrate(); err != nil {
+	if err := conn.AutoMigrate(
+		&entities.Schedule{},
+	); err != nil {
 		return err
 	}
 

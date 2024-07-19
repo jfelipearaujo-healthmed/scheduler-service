@@ -1,0 +1,16 @@
+with-expecter: false
+packages:
+    github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/cache:
+        config:
+          filename: "mock.go"
+          dir: "./internal/external/cache"
+          mockname: "Mock{{.InterfaceName}}"
+          inpackage: true
+          include-regex: "(Cache)"
+    github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/domain/repositories/scheduler:
+        config:
+          filename: "mock.go"
+          dir: "./internal/core/domain/repositories/scheduler"
+          mockname: "Mock{{.InterfaceName}}"
+          inpackage: true
+          include-regex: "(Repository)"
