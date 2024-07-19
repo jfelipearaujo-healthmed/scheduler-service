@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: scheduler-service-ingress
+  namespace: ns-scheduler-service
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /scheduler-service(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: scheduler-service
+                port:
+                  number: 5000
