@@ -31,7 +31,9 @@ func (h *handler) Handle(c echo.Context) error {
 		return http_response.UnprocessableEntity(c, "invalid request body", err)
 	}
 
-	schedule, err := h.useCase.Execute(ctx, req)
+	userId := c.Get("userId").(uint)
+
+	schedule, err := h.useCase.Execute(ctx, userId, req)
 	if err != nil {
 		return http_response.HandleErr(c, err)
 	}

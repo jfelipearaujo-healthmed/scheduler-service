@@ -11,7 +11,11 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "doctor_id": 1,
     "date_time_available": "2024-07-22 08:00",
     "active": true
 }
+
+### Get Schedules
+GET {{host}}/api/v1/schedules
+Content-Type: application/json
+Authorization: Bearer {{token}}

@@ -27,3 +27,13 @@ func MapFromDomain(schedule *entities.Schedule) *ScheduleResponse {
 		UpdatedAt:         schedule.UpdatedAt,
 	}
 }
+
+func MapFromDomainSlice(schedules []entities.Schedule) []*ScheduleResponse {
+	response := make([]*ScheduleResponse, len(schedules))
+
+	for i := range schedules {
+		response[i] = MapFromDomain(&schedules[i])
+	}
+
+	return response
+}

@@ -8,9 +8,9 @@ import (
 )
 
 type ListFilter struct {
-	DoctorID          *uint
-	DateTImeAvailable *time.Time
-	Active            *bool
+	DoctorID          *uint      `json:"doctor_id"`
+	DateTimeAvailable *time.Time `json:"date_time_available"`
+	Active            *bool      `json:"active"`
 }
 
 type Repository interface {

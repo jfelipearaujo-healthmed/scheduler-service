@@ -225,6 +225,9 @@ env: ## Create the .env file based on example
 	@echo "Generating..."
 	@cp .env.example .env
 
+main: ## Checkout the main branch
+	@git checkout main && git pull
+
 docker-up: ## Run the containers
 	@if command -v docker compose > /dev/null; then \
 		docker compose up -d; \
