@@ -1,0 +1,17 @@
+@host=http://localhost:5000
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOjUsImV4cCI6MTcyOTM4ODU5N30.4uP_U8pzGuFK8vHkIDVwg0g11T5RKoKPSkBFd1XJPz4
+
+### Health Check
+GET {{host}}/health
+Content-Type: application/json
+
+### Create a Schedule
+POST {{host}}/api/v1/schedules
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "doctor_id": 1,
+    "date_time_available": "2024-07-22 08:00",
+    "active": true
+}

@@ -7,10 +7,10 @@ packages:
           mockname: "Mock{{.InterfaceName}}"
           inpackage: true
           include-regex: "(Cache)"
-    github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/domain/repositories/scheduler:
+    github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/domain/repositories/schedule:
         config:
           filename: "mock.go"
-          dir: "./internal/core/domain/repositories/scheduler"
+          dir: "./internal/core/domain/repositories/schedule"
           mockname: "Mock{{.InterfaceName}}"
           inpackage: true
           include-regex: "(Repository)"

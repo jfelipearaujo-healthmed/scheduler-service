@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/domain/entities"
-	scheduler_repository_contract "github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/domain/repositories/scheduler"
+	schedule_repository_contract "github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/domain/repositories/schedule"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/infrastructure/shared/app_error"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/infrastructure/shared/fields"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/cache"
@@ -26,7 +26,7 @@ type repository struct {
 	dbService *persistence.DbService
 }
 
-func NewRepository(cache cache.Cache, dbService *persistence.DbService) scheduler_repository_contract.Repository {
+func NewRepository(cache cache.Cache, dbService *persistence.DbService) schedule_repository_contract.Repository {
 	return &repository{
 		cache:     cache,
 		dbService: dbService,
@@ -51,7 +51,23 @@ func (rp *repository) GetByID(ctx context.Context, id uint) (*entities.Schedule,
 	})
 }
 
-func (rp *repository) List(ctx context.Context, filter *scheduler_repository_contract.ListFilter) ([]entities.Schedule, error) {
+func (rp *repository) GetByDoctorIDAndDateTimeAvailable(ctx context.Context, doctorID uint, dateTimeAvailable time.Time) (*entities.Schedule, error) {
+	tx := rp.dbService.Instance.WithContext(ctx)
+
+	schedule := new(entities.Schedule)
+	result := tx.Where("doctor_id = ? AND date_time_available = ?", doctorID, dateTimeAvailable).First(schedule)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return nil, app_error.New(http.StatusNotFound, fmt.Sprintf("schedule with doctor id %d and date time available %s not found", doctorID, dateTimeAvailable))
+		}
+
+		return nil, result.Error
+	}
+
+	return schedule, nil
+}
+
+func (rp *repository) List(ctx context.Context, filter *schedule_repository_contract.ListFilter) ([]entities.Schedule, error) {
 	tx := rp.dbService.Instance.WithContext(ctx)
 
 	schedules := new([]entities.Schedule)
