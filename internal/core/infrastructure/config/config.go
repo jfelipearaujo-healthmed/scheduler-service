@@ -2,14 +2,17 @@ package config
 
 import (
 	"context"
+	"time"
 
 	"github.com/sethvargo/go-envconfig"
 )
 
 type ApiConfig struct {
-	Port       int    `env:"PORT, default=5000"`
-	EnvName    string `env:"ENV_NAME, default=development"`
-	ApiVersion string `env:"VERSION, default=v1"`
+	Port           int    `env:"PORT, default=5000"`
+	EnvName        string `env:"ENV_NAME, default=development"`
+	ApiVersion     string `env:"VERSION, default=v1"`
+	LocationRegion string `env:"LOCATION, default=America/Sao_Paulo"`
+	Location       *time.Location
 }
 
 func (c *ApiConfig) IsDevelopment() bool {
@@ -48,6 +51,13 @@ func LoadFromEnv(ctx context.Context) (*Config, error) {
 	if err := envconfig.Process(ctx, &cfg); err != nil {
 		return nil, err
 	}
+
+	Location, err := time.LoadLocation(cfg.ApiConfig.LocationRegion)
+	if err != nil {
+		return nil, err
+	}
+
+	cfg.ApiConfig.Location = Location
 
 	return &cfg, nil
 }
