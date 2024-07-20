@@ -10,11 +10,13 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	awsConfig "github.com/aws/aws-sdk-go-v2/config"
 	create_schedule_uc "github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/application/use_cases/schedule/create_schedule"
+	list_schedules_uc "github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/application/use_cases/schedule/list_schedules"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/infrastructure/config"
 	schedule_repository "github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/infrastructure/repositories/schedule"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/cache"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/http/handlers/health"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/http/handlers/schedule/create_schedule"
+	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/http/handlers/schedule/list_schedules"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/http/middlewares/logger"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/http/middlewares/token"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/persistence"
@@ -77,6 +79,7 @@ func NewServer(ctx context.Context, config *config.Config) (*Server, error) {
 			ScheduleRepository: scheduleRepository,
 
 			CreateScheduleUseCase: create_schedule_uc.NewUseCase(scheduleRepository, config.ApiConfig.Location),
+			ListSchedulesUseCase:  list_schedules_uc.NewUseCase(scheduleRepository),
 		},
 	}, nil
 }
@@ -114,6 +117,8 @@ func (s *Server) addHealthCheckRoutes(e *echo.Echo) {
 
 func (s *Server) addScheduleRoutes(g *echo.Group) {
 	createScheduleHandler := create_schedule.NewHandler(s.CreateScheduleUseCase)
+	listSchedulesHandler := list_schedules.NewHandler(s.ListSchedulesUseCase)
 
 	g.POST("/schedules", createScheduleHandler.Handle)
+	g.GET("/schedules", listSchedulesHandler.Handle)
 }

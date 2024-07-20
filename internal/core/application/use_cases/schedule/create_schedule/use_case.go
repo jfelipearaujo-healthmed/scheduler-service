@@ -28,7 +28,7 @@ func NewUseCase(repository schedule_repository_contract.Repository, location *ti
 	}
 }
 
-func (uc *useCase) Execute(ctx context.Context, request *schedule_dto.CreateScheduleRequest) (*entities.Schedule, error) {
+func (uc *useCase) Execute(ctx context.Context, doctorID uint, request *schedule_dto.CreateScheduleRequest) (*entities.Schedule, error) {
 	parsedTime, err := time.ParseInLocation(dateTimeLayout, request.DateTimeAvailable, uc.location)
 	if err != nil {
 		return nil, app_error.New(http.StatusBadRequest, "unable to parse the date and time provided")
@@ -44,12 +44,12 @@ func (uc *useCase) Execute(ctx context.Context, request *schedule_dto.CreateSche
 	}
 
 	schedule := &entities.Schedule{
-		DoctorID:          request.DoctorID,
+		DoctorID:          doctorID,
 		DateTimeAvailable: finalTime,
 		Active:            request.Active,
 	}
 
-	existingSchedule, err := uc.repository.GetByDoctorIDAndDateTimeAvailable(ctx, request.DoctorID, finalTime)
+	existingSchedule, err := uc.repository.GetByDoctorIDAndDateTimeAvailable(ctx, doctorID, finalTime)
 	if err != nil && !app_error.IsAppError(err) {
 		return nil, err
 	}

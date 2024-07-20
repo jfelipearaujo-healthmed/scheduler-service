@@ -10,7 +10,6 @@ import (
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/domain/entities"
 	schedule_repository_contract "github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/domain/repositories/schedule"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/infrastructure/shared/app_error"
-	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/infrastructure/shared/fields"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/cache"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/persistence"
 	"gorm.io/gorm"
@@ -72,12 +71,18 @@ func (rp *repository) List(ctx context.Context, filter *schedule_repository_cont
 
 	schedules := new([]entities.Schedule)
 
-	fields := fields.GetNonEmptyFields(filter, &fields.ANY_CHAR, &fields.ANY_CHAR)
-
 	query := tx
 
-	for field, value := range fields {
-		query = query.Where(fmt.Sprintf("%s LIKE ?", field), value)
+	if filter.DoctorID != nil {
+		query = query.Where("doctor_id = ?", *filter.DoctorID)
+	}
+
+	if filter.DateTimeAvailable != nil {
+		query = query.Where("date_time_available = ?", *filter.DateTimeAvailable)
+	}
+
+	if filter.Active != nil {
+		query = query.Where("active = ?", *filter.Active)
 	}
 
 	if err := query.Find(&schedules).Error; err != nil {
