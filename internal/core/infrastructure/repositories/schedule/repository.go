@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	cacheKey string        = "schedule:%d"
+	cacheKey string        = "schedule:%d:%d"
 	ttl      time.Duration = time.Hour * 24
 )
 
@@ -32,15 +32,15 @@ func NewRepository(cache cache.Cache, dbService *persistence.DbService) schedule
 	}
 }
 
-func (rp *repository) GetByID(ctx context.Context, id uint) (*entities.Schedule, error) {
-	return cache.WithCache(ctx, rp.cache, fmt.Sprintf(cacheKey, id), ttl, func() (*entities.Schedule, error) {
+func (rp *repository) GetByID(ctx context.Context, doctorID uint, scheduleID uint) (*entities.Schedule, error) {
+	return cache.WithCache(ctx, rp.cache, fmt.Sprintf(cacheKey, doctorID, scheduleID), ttl, func() (*entities.Schedule, error) {
 		tx := rp.dbService.Instance.WithContext(ctx)
 
 		schedule := new(entities.Schedule)
-		result := tx.First(schedule, id)
+		result := tx.Where("doctor_id = ? AND id = ?", doctorID, scheduleID).First(schedule)
 		if result.Error != nil {
 			if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-				return nil, app_error.New(http.StatusNotFound, fmt.Sprintf("schedule with id %d not found", id))
+				return nil, app_error.New(http.StatusNotFound, fmt.Sprintf("schedule with id %d not found", scheduleID))
 			}
 
 			return nil, result.Error
