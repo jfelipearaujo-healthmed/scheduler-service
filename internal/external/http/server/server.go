@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	awsConfig "github.com/aws/aws-sdk-go-v2/config"
 	create_schedule_uc "github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/application/use_cases/schedule/create_schedule"
+	delete_schedule_uc "github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/application/use_cases/schedule/delete_schedule"
 	get_schedule_by_id_uc "github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/application/use_cases/schedule/get_schedule_by_id"
 	list_schedules_uc "github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/application/use_cases/schedule/list_schedules"
 	update_schedule_uc "github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/application/use_cases/schedule/update_schedule"
@@ -18,6 +19,7 @@ import (
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/cache"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/http/handlers/health"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/http/handlers/schedule/create_schedule"
+	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/http/handlers/schedule/delete_schedule"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/http/handlers/schedule/get_schedule_by_id"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/http/handlers/schedule/list_schedules"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/http/handlers/schedule/update_schedule"
@@ -87,6 +89,7 @@ func NewServer(ctx context.Context, config *config.Config) (*Server, error) {
 			ListSchedulesUseCase:   list_schedules_uc.NewUseCase(scheduleRepository),
 			GetScheduleByIdUseCase: get_schedule_by_id_uc.NewUseCase(scheduleRepository),
 			UpdateScheduleUseCase:  update_schedule_uc.NewUseCase(scheduleRepository, config.ApiConfig.Location),
+			DeleteScheduleUseCase:  delete_schedule_uc.NewUseCase(scheduleRepository),
 		},
 	}, nil
 }
@@ -128,9 +131,11 @@ func (s *Server) addScheduleRoutes(g *echo.Group) {
 	listSchedulesHandler := list_schedules.NewHandler(s.ListSchedulesUseCase)
 	getScheduleByIdHandler := get_schedule_by_id.NewHandler(s.GetScheduleByIdUseCase)
 	updateScheduleHandler := update_schedule.NewHandler(s.UpdateScheduleUseCase)
+	deleteScheduleHandler := delete_schedule.NewHandler(s.DeleteScheduleUseCase)
 
 	g.POST("/schedules", createScheduleHandler.Handle)
 	g.GET("/schedules", listSchedulesHandler.Handle)
 	g.GET("/schedules/:scheduleId", getScheduleByIdHandler.Handle)
 	g.PUT("/schedules/:scheduleId", updateScheduleHandler.Handle)
+	g.DELETE("/schedules/:scheduleId", deleteScheduleHandler.Handle)
 }

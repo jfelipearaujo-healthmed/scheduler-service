@@ -47,8 +47,8 @@ Legend:
 | ✅         | GET    | `/schedules`              | It will return all schedules    | Doctor    |
 | ✅         | GET    | `/schedules/{scheduleId}` | It will return a schedule by id | Doctor    |
 | ✅         | POST   | `/schedules`              | It will create a schedule       | Doctor    |
-| 💤         | PUT    | `/schedules/{scheduleId}` | It will update a schedule       | Doctor    |
-| 💤         | DELETE | `/schedules/{scheduleId}` | It will delete a schedule       | Doctor    |
+| ✅         | PUT    | `/schedules/{scheduleId}` | It will update a schedule       | Doctor    |
+| ✅         | DELETE | `/schedules/{scheduleId}` | It will delete a schedule       | Doctor    |
 
 # License
 
