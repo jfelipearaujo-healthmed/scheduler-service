@@ -9,10 +9,16 @@ import (
 type Role string
 
 const (
-	Doctor Role = "doctor"
+	Doctor  Role = "doctor"
+	Patient Role = "patient"
+	Any     Role = "any"
 )
 
 func IsRole(role string, compareTo Role) bool {
+	if compareTo == Any {
+		return Role(role) == Doctor || Role(role) == Patient
+	}
+
 	return Role(role) == compareTo
 }
 
