@@ -14,7 +14,7 @@ type ListFilter struct {
 }
 
 type Repository interface {
-	GetByID(ctx context.Context, id uint) (*entities.Schedule, error)
+	GetByID(ctx context.Context, doctorID uint, scheduleID uint) (*entities.Schedule, error)
 	GetByDoctorIDAndDateTimeAvailable(ctx context.Context, doctorID uint, dateTimeAvailable time.Time) (*entities.Schedule, error)
 	List(ctx context.Context, filter *ListFilter) ([]entities.Schedule, error)
 	Create(ctx context.Context, schedule *entities.Schedule) (*entities.Schedule, error)

@@ -27,6 +27,10 @@ func NotFound(c echo.Context) error {
 	return c.JSON(http.StatusNotFound, app_error.New(http.StatusNotFound, "resource not found"))
 }
 
+func Forbidden(c echo.Context, message string) error {
+	return c.JSON(http.StatusForbidden, app_error.New(http.StatusForbidden, message))
+}
+
 func HandleErr(c echo.Context, err error) error {
 	switch t := err.(type) {
 	case *app_error.AppError:
