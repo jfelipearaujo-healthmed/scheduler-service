@@ -46,17 +46,17 @@ func (_m *MockRepository) Create(ctx context.Context, schedule *entities.Schedul
 	return r0, r1
 }
 
-// Delete provides a mock function with given fields: ctx, id
-func (_m *MockRepository) Delete(ctx context.Context, id uint) error {
-	ret := _m.Called(ctx, id)
+// Delete provides a mock function with given fields: ctx, doctorID, scheduleID
+func (_m *MockRepository) Delete(ctx context.Context, doctorID uint, scheduleID uint) error {
+	ret := _m.Called(ctx, doctorID, scheduleID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Delete")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, uint) error); ok {
-		r0 = rf(ctx, id)
+	if rf, ok := ret.Get(0).(func(context.Context, uint, uint) error); ok {
+		r0 = rf(ctx, doctorID, scheduleID)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -94,9 +94,9 @@ func (_m *MockRepository) GetByDoctorIDAndDateTimeAvailable(ctx context.Context,
 	return r0, r1
 }
 
-// GetByID provides a mock function with given fields: ctx, id
-func (_m *MockRepository) GetByID(ctx context.Context, id uint) (*entities.Schedule, error) {
-	ret := _m.Called(ctx, id)
+// GetByID provides a mock function with given fields: ctx, doctorID, scheduleID
+func (_m *MockRepository) GetByID(ctx context.Context, doctorID uint, scheduleID uint) (*entities.Schedule, error) {
+	ret := _m.Called(ctx, doctorID, scheduleID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetByID")
@@ -104,19 +104,19 @@ func (_m *MockRepository) GetByID(ctx context.Context, id uint) (*entities.Sched
 
 	var r0 *entities.Schedule
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, uint) (*entities.Schedule, error)); ok {
-		return rf(ctx, id)
+	if rf, ok := ret.Get(0).(func(context.Context, uint, uint) (*entities.Schedule, error)); ok {
+		return rf(ctx, doctorID, scheduleID)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, uint) *entities.Schedule); ok {
-		r0 = rf(ctx, id)
+	if rf, ok := ret.Get(0).(func(context.Context, uint, uint) *entities.Schedule); ok {
+		r0 = rf(ctx, doctorID, scheduleID)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*entities.Schedule)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(context.Context, uint) error); ok {
-		r1 = rf(ctx, id)
+	if rf, ok := ret.Get(1).(func(context.Context, uint, uint) error); ok {
+		r1 = rf(ctx, doctorID, scheduleID)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -154,9 +154,9 @@ func (_m *MockRepository) List(ctx context.Context, filter *ListFilter) ([]entit
 	return r0, r1
 }
 
-// Update provides a mock function with given fields: ctx, schedule
-func (_m *MockRepository) Update(ctx context.Context, schedule *entities.Schedule) (*entities.Schedule, error) {
-	ret := _m.Called(ctx, schedule)
+// Update provides a mock function with given fields: ctx, doctorID, schedule
+func (_m *MockRepository) Update(ctx context.Context, doctorID uint, schedule *entities.Schedule) (*entities.Schedule, error) {
+	ret := _m.Called(ctx, doctorID, schedule)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Update")
@@ -164,19 +164,19 @@ func (_m *MockRepository) Update(ctx context.Context, schedule *entities.Schedul
 
 	var r0 *entities.Schedule
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, *entities.Schedule) (*entities.Schedule, error)); ok {
-		return rf(ctx, schedule)
+	if rf, ok := ret.Get(0).(func(context.Context, uint, *entities.Schedule) (*entities.Schedule, error)); ok {
+		return rf(ctx, doctorID, schedule)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, *entities.Schedule) *entities.Schedule); ok {
-		r0 = rf(ctx, schedule)
+	if rf, ok := ret.Get(0).(func(context.Context, uint, *entities.Schedule) *entities.Schedule); ok {
+		r0 = rf(ctx, doctorID, schedule)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*entities.Schedule)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(context.Context, *entities.Schedule) error); ok {
-		r1 = rf(ctx, schedule)
+	if rf, ok := ret.Get(1).(func(context.Context, uint, *entities.Schedule) error); ok {
+		r1 = rf(ctx, doctorID, schedule)
 	} else {
 		r1 = ret.Error(1)
 	}

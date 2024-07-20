@@ -102,24 +102,22 @@ func (rp *repository) Create(ctx context.Context, schedule *entities.Schedule) (
 	return schedule, nil
 }
 
-func (rp *repository) Update(ctx context.Context, schedule *entities.Schedule) (*entities.Schedule, error) {
+func (rp *repository) Update(ctx context.Context, doctorID uint, schedule *entities.Schedule) (*entities.Schedule, error) {
 	tx := rp.dbService.Instance.WithContext(ctx)
 
-	result := tx.Model(schedule).Save(schedule)
-
-	if err := result.Error; err != nil {
+	if err := tx.Model(schedule).Where("doctor_id = ? AND id = ?", doctorID, schedule.ID).Save(schedule).Error; err != nil {
 		return nil, err
 	}
 
-	return schedule, nil
+	return cache.WithRefreshCache(ctx, rp.cache, fmt.Sprintf(cacheKey, doctorID, schedule.ID), ttl, schedule)
 }
 
-func (rp *repository) Delete(ctx context.Context, id uint) error {
+func (rp *repository) Delete(ctx context.Context, doctorID uint, scheduleID uint) error {
 	tx := rp.dbService.Instance.WithContext(ctx)
 
-	if err := tx.Delete(&entities.Schedule{}, id).Error; err != nil {
+	if err := tx.Where("doctor_id = ? AND id = ?", doctorID, scheduleID).Delete(&entities.Schedule{}).Error; err != nil {
 		return err
 	}
 
-	return nil
+	return cache.WithDeleteCache(ctx, rp.cache, fmt.Sprintf(cacheKey, doctorID, scheduleID))
 }
