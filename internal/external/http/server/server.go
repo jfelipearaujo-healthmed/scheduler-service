@@ -12,6 +12,7 @@ import (
 	create_schedule_uc "github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/application/use_cases/schedule/create_schedule"
 	get_schedule_by_id_uc "github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/application/use_cases/schedule/get_schedule_by_id"
 	list_schedules_uc "github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/application/use_cases/schedule/list_schedules"
+	update_schedule_uc "github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/application/use_cases/schedule/update_schedule"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/infrastructure/config"
 	schedule_repository "github.com/jfelipearaujo-healthmed/scheduler-service/internal/core/infrastructure/repositories/schedule"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/cache"
@@ -19,6 +20,7 @@ import (
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/http/handlers/schedule/create_schedule"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/http/handlers/schedule/get_schedule_by_id"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/http/handlers/schedule/list_schedules"
+	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/http/handlers/schedule/update_schedule"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/http/middlewares/logger"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/http/middlewares/role"
 	"github.com/jfelipearaujo-healthmed/scheduler-service/internal/external/http/middlewares/token"
@@ -84,6 +86,7 @@ func NewServer(ctx context.Context, config *config.Config) (*Server, error) {
 			CreateScheduleUseCase:  create_schedule_uc.NewUseCase(scheduleRepository, config.ApiConfig.Location),
 			ListSchedulesUseCase:   list_schedules_uc.NewUseCase(scheduleRepository),
 			GetScheduleByIdUseCase: get_schedule_by_id_uc.NewUseCase(scheduleRepository),
+			UpdateScheduleUseCase:  update_schedule_uc.NewUseCase(scheduleRepository, config.ApiConfig.Location),
 		},
 	}, nil
 }
@@ -124,8 +127,10 @@ func (s *Server) addScheduleRoutes(g *echo.Group) {
 	createScheduleHandler := create_schedule.NewHandler(s.CreateScheduleUseCase)
 	listSchedulesHandler := list_schedules.NewHandler(s.ListSchedulesUseCase)
 	getScheduleByIdHandler := get_schedule_by_id.NewHandler(s.GetScheduleByIdUseCase)
+	updateScheduleHandler := update_schedule.NewHandler(s.UpdateScheduleUseCase)
 
 	g.POST("/schedules", createScheduleHandler.Handle)
 	g.GET("/schedules", listSchedulesHandler.Handle)
 	g.GET("/schedules/:scheduleId", getScheduleByIdHandler.Handle)
+	g.PUT("/schedules/:scheduleId", updateScheduleHandler.Handle)
 }

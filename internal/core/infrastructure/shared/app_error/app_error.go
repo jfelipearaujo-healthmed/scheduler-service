@@ -11,9 +11,11 @@ func (appErr *AppError) Error() string {
 }
 
 func New(code int, message string, errs ...error) *AppError {
-	errMsgs := make([]string, len(errs))
-	for i, err := range errs {
-		errMsgs[i] = err.Error()
+	errMsgs := make([]string, 0)
+	for _, err := range errs {
+		if err != nil {
+			errMsgs = append(errMsgs, err.Error())
+		}
 	}
 
 	return &AppError{

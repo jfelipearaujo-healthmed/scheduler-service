@@ -47,3 +47,11 @@ func WithRefreshCache[T any](ctx context.Context, cache Cache, key string, ttl t
 	cache.Set(ctx, key, string(jsonValue), ttl)
 	return value, nil
 }
+
+func WithDeleteCache(ctx context.Context, cache Cache, key string) error {
+	_, found := cache.Get(ctx, key)
+	if found {
+		cache.Delete(ctx, key)
+	}
+	return nil
+}

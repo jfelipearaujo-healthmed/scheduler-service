@@ -18,6 +18,6 @@ type Repository interface {
 	GetByDoctorIDAndDateTimeAvailable(ctx context.Context, doctorID uint, dateTimeAvailable time.Time) (*entities.Schedule, error)
 	List(ctx context.Context, filter *ListFilter) ([]entities.Schedule, error)
 	Create(ctx context.Context, schedule *entities.Schedule) (*entities.Schedule, error)
-	Update(ctx context.Context, schedule *entities.Schedule) (*entities.Schedule, error)
-	Delete(ctx context.Context, id uint) error
+	Update(ctx context.Context, doctorID uint, schedule *entities.Schedule) (*entities.Schedule, error)
+	Delete(ctx context.Context, doctorID uint, scheduleID uint) error
 }

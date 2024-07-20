@@ -1,9 +1,10 @@
 package schedule_dto
 
-import "time"
-
 type UpdateScheduleRequest struct {
-	DoctorID          *uint      `json:"doctor_id"`
-	DateTimeAvailable *time.Time `json:"date_time_available"`
-	Active            *bool      `json:"active"`
+	DateTimeAvailable *string `json:"date_time_available"`
+	Active            *bool   `json:"active"`
+}
+
+func (r *UpdateScheduleRequest) IsValid() bool {
+	return r.DateTimeAvailable != nil || r.Active != nil
 }
