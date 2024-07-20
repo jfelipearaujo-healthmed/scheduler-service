@@ -15,6 +15,10 @@ func Created(c echo.Context, body interface{}) error {
 	return c.JSON(http.StatusCreated, body)
 }
 
+func NoContent(c echo.Context) error {
+	return c.NoContent(http.StatusNoContent)
+}
+
 func BadRequest(c echo.Context, message string, err error) error {
 	return c.JSON(http.StatusBadRequest, app_error.New(http.StatusBadRequest, message, err))
 }
