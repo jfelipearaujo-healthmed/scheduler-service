@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: scheduler-service-config
-  namespace: ns-scheduler-service
+  namespace: ns-scheduler
   labels:
     app: scheduler-service
 data:
@@ -10,6 +10,6 @@ data:
   API_ENV_NAME: production
   API_VERSION: v1
   DB_URL: todo
-  DB_URL_SECRET_NAME: db-scheduler-service-url-secret
+  DB_URL_SECRET_NAME: db-scheduler-url-secret
   CACHE_HOST: todo
-  CACHE_HOST_SECRET_NAME: cache-host-secret
+  CACHE_HOST_SECRET_NAME: healthmed-cache-url-secret

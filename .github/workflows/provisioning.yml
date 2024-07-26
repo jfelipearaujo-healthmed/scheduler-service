@@ -86,7 +86,7 @@ jobs:
         run: make k8s-deploy id=${{ secrets.AWS_ACCOUNT_ID }}
 
       - name: Update deployment
-        run: kubectl set image deployments/scheduler-service scheduler-service=jsfelipearaujo/scheduler-service:v${{ github.run_number }} -n ns-scheduler-service
+        run: kubectl set image deployments/scheduler-service scheduler-service=jsfelipearaujo/scheduler-service:v${{ github.run_number }} -n ns-scheduler
 
       - name: Wait for deployment
-        run: kubectl rollout status deployments/scheduler-service -n ns-scheduler-service
+        run: kubectl rollout status deployments/scheduler-service -n ns-scheduler
