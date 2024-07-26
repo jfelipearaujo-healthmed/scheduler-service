@@ -1,0 +1,23 @@
+@startuml get_schedule
+
+title Getting a Schedule Flow
+
+actor "User" as user
+participant "Schedule Service" as schedule_service
+participant "Database" as database
+
+note over user
+In this example, the user
+must be a **doctor**.
+end note
+
+user -> schedule_service: GET /schedules/{scheduleId}\n(Bearer JWT)
+
+activate schedule_service
+schedule_service -> schedule_service: Check if schedule exists
+schedule_service -> database: Get schedule
+database --> schedule_service: Schedule
+schedule_service --> user: 200 OK
+deactivate schedule_service
+
+@enduml

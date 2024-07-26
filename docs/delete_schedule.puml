@@ -1,0 +1,23 @@
+@startuml delete_schedule
+
+title Deleting a Schedule Flow
+
+actor "User" as user
+participant "Schedule Service" as schedule_service
+participant "Database" as database
+
+note over user
+In this example, the user
+must be a **doctor**.
+end note
+
+user -> schedule_service: DELETE /schedules/{scheduleId}\n(Bearer JWT)
+
+activate schedule_service
+schedule_service -> schedule_service: Check if schedule is not\nreserved by any patient
+schedule_service -> database: Delete schedule
+database --> schedule_service: Deleted
+schedule_service --> user: 204 No Content
+deactivate schedule_service
+
+@enduml
