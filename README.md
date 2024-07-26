@@ -1,22 +1,24 @@
 # Scheduler Service
-Service responsible to manage the doctor schedule
 
-# Local Development
+Serviço responsável por gerenciar a agenda médica.
 
-## Requirements
+# Desenvolvimento Local
 
-- [Kubernetes](https://kubernetes.io/)
+## Requisitos
+
+- [Terraform](https://www.terraform.io/downloads.html)
+- [Terraform Docs](https://github.com/terraform-docs/terraform-docs)
 - [AWS CLI](https://aws.amazon.com/cli/)
 
-## Manual deployment
+## Implantação manual
 
-### Attention
+### Atenção
 
-Before deploying the service, make sure to set the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables.
+Antes de implantar o cluster, certifique-se de definir as variáveis ​​de ambiente `AWS_ACCESS_KEY_ID` e `AWS_SECRET_ACCESS_KEY`.
 
-Be aware that this process will take a few minutes (~4 minutes) to be completed.
+Esteja ciente de que esse processo levará alguns minutos (~4 minutos) para ser concluído.
 
-To deploy the service manually, run the following commands in order:
+Para implantar o cluster manualmente, execute os seguintes comandos em ordem:
 
 ```bash
 make init
@@ -24,65 +26,58 @@ make check # this will execute fmt, validate and plan
 make apply
 ```
 
-To destroy the service, run the following command:
+Para destruir o cluster, execute o seguinte comando:
 
 ```bash
 make destroy
 ```
 
-## Automated deployment
+## Implantação Automatizada
 
-The automated deployment is triggered by a GitHub Action.
+A implantação automatizada é acionada por uma GitHub Action.
 
-# Endpoints
+# Rotas
 
-Legend:
-- ✅: Development completed
-- 🚧: In progress
-- 💤: Not started
+| Método | Rota                      | Descrição               | Papel do Usuário |
+| ------ | ------------------------- | ----------------------- | ---------------- |
+| GET    | `/schedules`              | Obtém todas as agendas  | Médico           |
+| GET    | `/schedules/{scheduleId}` | Obtém uma agenda por ID | Médico           |
+| POST   | `/schedules`              | Cria uma agenda         | Médico           |
+| PUT    | `/schedules/{scheduleId}` | Atualiza uma agenda     | Médico           |
+| DELETE | `/schedules/{scheduleId}` | Exclui uma agenda       | Médico           |
 
+# Diagramas
 
-| Completed | Method | Endpoint                  | Description                     | User Role |
-| --------- | ------ | ------------------------- | ------------------------------- | --------- |
-| ✅         | GET    | `/schedules`              | It will return all schedules    | Doctor    |
-| ✅         | GET    | `/schedules/{scheduleId}` | It will return a schedule by id | Doctor    |
-| ✅         | POST   | `/schedules`              | It will create a schedule       | Doctor    |
-| ✅         | PUT    | `/schedules/{scheduleId}` | It will update a schedule       | Doctor    |
-| ✅         | DELETE | `/schedules/{scheduleId}` | It will delete a schedule       | Doctor    |
+## Criar Agenda
 
-
-# Diagrams
-
-## Create Schedule
-
-In this diagram, we can see the flow of the create a new schedule.
+No diagrama abaixo, podemos ver o fluxo de criar uma nova agenda.
 
 ![create_schedule](./docs/create_schedule.svg)
 
-## Get Schedules
+## Obter Agendas
 
-In this diagram, we can see the flow of getting all schedules.
+No diagrama abaixo, podemos ver o fluxo de obter todas as agendas.
 
 ![get_schedules](./docs/get_schedules.svg)
 
-## Get Schedule
+## Obter Agenda
 
-In this diagram, we can see the flow of getting a schedule.
+No diagrama abaixo, podemos ver o fluxo de obter uma agenda.
 
 ![get_schedule](./docs/get_schedule.svg)
 
-## Update Schedule
+## Atualizar Agenda
 
-In this diagram, we can see the flow of updating a schedule.
+No diagrama abaixo, podemos ver o fluxo de atualizar uma agenda.
 
 ![update_schedule](./docs/update_schedule.svg)
 
-## Delete Schedule
+## Excluir Agenda
 
-In this diagram, we can see the flow of deleting a schedule.
+No diagrama abaixo, podemos ver o fluxo de excluir uma agenda.
 
 ![delete_schedule](./docs/delete_schedule.svg)
 
-# License
+# Licença
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Este projeto é licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.

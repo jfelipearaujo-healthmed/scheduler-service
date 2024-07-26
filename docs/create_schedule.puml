@@ -1,23 +1,23 @@
 @startuml create_schedule
 
-title Creating a Schedule Flow
+title Criar Agenda
 
 actor "User" as user
 participant "Schedule Service" as schedule_service
 participant "Database" as database
 
 note over user
-In this example, the user
-must be a **doctor**.
+Neste exemplo, o usuário
+deve ser um **médico**.
 end note
 
 user -> schedule_service: POST /schedules\n(Bearer JWT)
 
 activate schedule_service
-schedule_service -> schedule_service: Validate schedule details
-schedule_service -> database: Create schedule
-database --> schedule_service: Created
-schedule_service --> user: 201 Created
+schedule_service -> schedule_service: Validar detalhes da agenda
+schedule_service -> database: Cria a agenda
+database --> schedule_service: Criado
+schedule_service --> user: 201 Criado
 deactivate schedule_service
 
 @enduml
